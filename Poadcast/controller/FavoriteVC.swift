@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FavoriteVC.swift
 //  Poadcast
 //
 //  Created by hosam on 4/30/19.
@@ -8,13 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class FavoriteVC: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        view.backgroundColor = .red
     }
-
-
+    
 }
-
