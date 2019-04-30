@@ -8,7 +8,16 @@
 
 import UIKit
 
-struct PodcastModel {
-    let name:String
-    let artistName:String
+struct PodcastModel: Codable {
+   
+     var artistName:String?
+    var trackName:String?
+}
+
+struct Result: Codable {
+     let resultCount: Int
+    let results:[PodcastModel] 
+    
+    
+   
 }

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		25785D36C952219DAF15C31F /* Pods_Poadcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB377CC0517B6EBCAC3DACC9 /* Pods_Poadcast.framework */; };
+		4E72DEA2227897AB00CC16C8 /* SingeltonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */; };
+		4E72DEA522789AEA00CC16C8 /* PodcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E72DEA422789AEA00CC16C8 /* PodcastCell.xib */; };
+		4E72DEA722789D6100CC16C8 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E72DEA622789D6100CC16C8 /* PodcastCell.swift */; };
 		4E7D371B22784842007DB63B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7D371A22784842007DB63B /* AppDelegate.swift */; };
 		4E7D371D22784842007DB63B /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7D371C22784842007DB63B /* SearchVC.swift */; };
 		4E7D372022784842007DB63B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E7D371E22784842007DB63B /* Main.storyboard */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingeltonAPI.swift; sourceTree = "<group>"; };
+		4E72DEA422789AEA00CC16C8 /* PodcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodcastCell.xib; sourceTree = "<group>"; };
+		4E72DEA622789D6100CC16C8 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
 		4E7D371722784842007DB63B /* Poadcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poadcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E7D371A22784842007DB63B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E7D371C22784842007DB63B /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
@@ -50,6 +56,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E72DEA02278978C00CC16C8 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		4E72DEA322789ACC00CC16C8 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				4E72DEA422789AEA00CC16C8 /* PodcastCell.xib */,
+				4E72DEA622789D6100CC16C8 /* PodcastCell.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 		4E7D370E22784842007DB63B = {
 			isa = PBXGroup;
 			children = (
@@ -72,7 +95,9 @@
 			isa = PBXGroup;
 			children = (
 				4E7D371A22784842007DB63B /* AppDelegate.swift */,
+				4E72DEA02278978C00CC16C8 /* API */,
 				4E83293F22786A2400755EB9 /* model */,
+				4E72DEA322789ACC00CC16C8 /* view */,
 				4E7D372C227848B4007DB63B /* controller */,
 				4E7D371E22784842007DB63B /* Main.storyboard */,
 				4E7D372122784844007DB63B /* Assets.xcassets */,
@@ -108,7 +133,6 @@
 				A686C226FC1B741C6BE7E8E7 /* Pods-Poadcast.debug.xcconfig */,
 				D0BA3E6AB94E8D223AD28C42 /* Pods-Poadcast.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -182,6 +206,7 @@
 			files = (
 				4E7D372522784844007DB63B /* LaunchScreen.storyboard in Resources */,
 				4E7D372222784844007DB63B /* Assets.xcassets in Resources */,
+				4E72DEA522789AEA00CC16C8 /* PodcastCell.xib in Resources */,
 				4E7D372022784842007DB63B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,10 +267,12 @@
 			files = (
 				4E83294122786A3D00755EB9 /* PodcastModel.swift in Sources */,
 				4E7D373022784BEF007DB63B /* FavoriteVC.swift in Sources */,
+				4E72DEA2227897AB00CC16C8 /* SingeltonAPI.swift in Sources */,
 				4E7D373222784C3B007DB63B /* DownloadVC.swift in Sources */,
 				4E83293E22786A1500755EB9 /* ExtensionUivew.swift in Sources */,
 				4E7D371D22784842007DB63B /* SearchVC.swift in Sources */,
 				4E7D372E22784B12007DB63B /* MainTabBarVC.swift in Sources */,
+				4E72DEA722789D6100CC16C8 /* PodcastCell.swift in Sources */,
 				4E7D371B22784842007DB63B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

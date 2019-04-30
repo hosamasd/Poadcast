@@ -30,8 +30,8 @@ class MainTabBarVC: UITabBarController {
         tabBar.tintColor = .black
         
         viewControllers = [
+           search ,
             favorite,
-            search,
             download
             ]
         
