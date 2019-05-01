@@ -11,10 +11,7 @@ import Alamofire
 class SearchVC: UITableViewController {
 
     let cellID = "cellID"
-    var poadcastArray:[PodcastModel] = [
-        PodcastModel(artistName: "hosam", trackName: "asd"),
-        PodcastModel(artistName: "saad", trackName: "dew")
-  ]
+    var poadcastArray = [PodcastModel]() 
     
     lazy var searchBar:UISearchBar = {
        let se = UISearchBar()

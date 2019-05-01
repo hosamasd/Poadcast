@@ -103,7 +103,7 @@
 				4E7D372122784844007DB63B /* Assets.xcassets */,
 				4E7D372322784844007DB63B /* LaunchScreen.storyboard */,
 				4E7D372622784844007DB63B /* Info.plist */,
-				4E83293D22786A1500755EB9 /* ExtensionUivew.swift */,
+				4E93626E227977410018ADF8 /* resources */,
 			);
 			path = Poadcast;
 			sourceTree = "<group>";
@@ -125,6 +125,14 @@
 				4E83294022786A3D00755EB9 /* PodcastModel.swift */,
 			);
 			path = model;
+			sourceTree = "<group>";
+		};
+		4E93626E227977410018ADF8 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				4E83293D22786A1500755EB9 /* ExtensionUivew.swift */,
+			);
+			path = resources;
 			sourceTree = "<group>";
 		};
 		524C89E009EE67EE21B2C066 /* Pods */ = {
@@ -224,12 +232,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Poadcast/Pods-Poadcast-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
