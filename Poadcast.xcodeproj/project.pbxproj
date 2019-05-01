@@ -21,6 +21,8 @@
 		4E7D373222784C3B007DB63B /* DownloadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7D373122784C3B007DB63B /* DownloadVC.swift */; };
 		4E83293E22786A1500755EB9 /* ExtensionUivew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E83293D22786A1500755EB9 /* ExtensionUivew.swift */; };
 		4E83294122786A3D00755EB9 /* PodcastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E83294022786A3D00755EB9 /* PodcastModel.swift */; };
+		4E93627022797E760018ADF8 /* EpoisdesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E93626F22797E760018ADF8 /* EpoisdesVC.swift */; };
+		4E936273227981EA0018ADF8 /* EpoisdesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E936272227981EA0018ADF8 /* EpoisdesModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		4E7D373122784C3B007DB63B /* DownloadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadVC.swift; sourceTree = "<group>"; };
 		4E83293D22786A1500755EB9 /* ExtensionUivew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUivew.swift; sourceTree = "<group>"; };
 		4E83294022786A3D00755EB9 /* PodcastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastModel.swift; sourceTree = "<group>"; };
+		4E93626F22797E760018ADF8 /* EpoisdesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpoisdesVC.swift; sourceTree = "<group>"; };
+		4E936272227981EA0018ADF8 /* EpoisdesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpoisdesModel.swift; sourceTree = "<group>"; };
 		A686C226FC1B741C6BE7E8E7 /* Pods-Poadcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Poadcast.debug.xcconfig"; path = "Target Support Files/Pods-Poadcast/Pods-Poadcast.debug.xcconfig"; sourceTree = "<group>"; };
 		D0BA3E6AB94E8D223AD28C42 /* Pods-Poadcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Poadcast.release.xcconfig"; path = "Target Support Files/Pods-Poadcast/Pods-Poadcast.release.xcconfig"; sourceTree = "<group>"; };
 		FB377CC0517B6EBCAC3DACC9 /* Pods_Poadcast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Poadcast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				4E7D372D22784B12007DB63B /* MainTabBarVC.swift */,
-				4E7D371C22784842007DB63B /* SearchVC.swift */,
+				4E93627122797E800018ADF8 /* Search */,
 				4E7D372F22784BEF007DB63B /* FavoriteVC.swift */,
 				4E7D373122784C3B007DB63B /* DownloadVC.swift */,
 			);
@@ -123,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				4E83294022786A3D00755EB9 /* PodcastModel.swift */,
+				4E936272227981EA0018ADF8 /* EpoisdesModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -133,6 +138,15 @@
 				4E83293D22786A1500755EB9 /* ExtensionUivew.swift */,
 			);
 			path = resources;
+			sourceTree = "<group>";
+		};
+		4E93627122797E800018ADF8 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				4E7D371C22784842007DB63B /* SearchVC.swift */,
+				4E93626F22797E760018ADF8 /* EpoisdesVC.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		524C89E009EE67EE21B2C066 /* Pods */ = {
@@ -283,6 +297,8 @@
 				4E7D371D22784842007DB63B /* SearchVC.swift in Sources */,
 				4E7D372E22784B12007DB63B /* MainTabBarVC.swift in Sources */,
 				4E72DEA722789D6100CC16C8 /* PodcastCell.swift in Sources */,
+				4E936273227981EA0018ADF8 /* EpoisdesModel.swift in Sources */,
+				4E93627022797E760018ADF8 /* EpoisdesVC.swift in Sources */,
 				4E7D371B22784842007DB63B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
