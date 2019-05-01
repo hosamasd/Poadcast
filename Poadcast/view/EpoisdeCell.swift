@@ -11,7 +11,11 @@ import UIKit
 class EpoisdeCell: UITableViewCell {
 
     @IBOutlet weak var epoisdeDescription: UILabel!
-    @IBOutlet weak var epoisdeTitle: UILabel!
+    @IBOutlet weak var epoisdeTitle: UILabel!{
+        didSet{
+            epoisdeTitle.numberOfLines = 2
+        }
+    }
     @IBOutlet weak var epoisdePubDate: UILabel!
     @IBOutlet weak var epoisdeImage: UIImageView!
    
@@ -24,6 +28,8 @@ class EpoisdeCell: UITableViewCell {
            let dateString = dateFormatter.string(from: epoisde.pubDate)
             
             epoisdePubDate.text = dateString
+             let url =  URL(string: epoisde.imageUrl?.toSecrueHttps() ?? "")
+           epoisdeImage.sd_setImage(with: url, completed: nil)
         }
         
     }

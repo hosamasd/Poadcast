@@ -95,9 +95,18 @@ extension SearchVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
+        if searchText.count <= 0 {
+            self.poadcastArray.removeAll()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
         APIServices.shared.getPodcast(text: searchText) { (pods) in
             self.poadcastArray.append(pods)
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
         }
        
     }

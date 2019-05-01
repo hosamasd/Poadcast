@@ -11,7 +11,7 @@ import FeedKit
 
 class EpoisdesVC: UITableViewController {
     let cellID = "cellID"
-    var eposdeArray:[EpoisdesModel] = []
+    var eposdeArray = [EpoisdesModel]()
     
     var podcast:PodcastModel? {
         didSet{
@@ -46,34 +46,17 @@ class EpoisdesVC: UITableViewController {
          tableView.tableFooterView = UIView() // remove lines of cells
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
+    }
+    
     func fetchEpoisde()  {
         guard let podcastUrl = podcast?.feedUrl else { return  }
-        let securePodcastUrl = podcastUrl.contains("https") ? podcastUrl : podcastUrl.replacingOccurrences(of: "http", with: "https")
         
-        guard let feedUrl =  URL(string: securePodcastUrl) else { return  }
-       let parser = FeedParser(URL: feedUrl)
-        parser.parseAsync { (result) in
-            
-            switch result {
-            case let .rss(feed):
-                var epoisdes = [EpoisdesModel]()
-                feed.items?.forEach({ (feedItem) in
-                 
-                    let epoisde = EpoisdesModel(feed: feedItem)
-                    epoisdes.append(epoisde)
-                })
-                
-                self.eposdeArray = epoisdes
-                DispatchQueue.main.async {
-                     self.tableView.reloadData()
-                }
-               
-                break
-            case let .failure(error):
-                print("not found",error)
-                break
-            default:
-                print("load feed .....")
+        APIServices.shared.fetchEpoisdes(feedUrl: podcastUrl) { (epoisde) in
+            self.eposdeArray = epoisde
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
     }

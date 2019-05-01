@@ -8,12 +8,27 @@
 
 import UIKit
 import Alamofire
-
+import FeedKit
 class APIServices {
     
      let baseUrlItunes = "https://itunes.apple.com/search"
     static let shared = APIServices()
     
+    func fetchEpoisdes(feedUrl:String,completion:  @escaping ([EpoisdesModel])->())  {
+        guard let feedUrl =  URL(string: feedUrl) else { return  }
+        let parser = FeedParser(URL: feedUrl)
+        parser.parseAsync { (result) in
+            
+            if let err = result.error {
+                print("an error happened ",err.localizedDescription)
+                return
+            }
+            guard let feed = result.rssFeed else {return}
+            let epoisdes = feed.toEpoisdes()
+           completion(epoisdes)
+            
+        }
+    }
     func getPodcast(text:String,completion: @escaping (PodcastModel)->())  {
        
         let params = ["term":text,"media":"podcast"]
