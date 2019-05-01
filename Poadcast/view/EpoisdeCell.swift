@@ -22,7 +22,7 @@ class EpoisdeCell: UITableViewCell {
     var epoisde:EpoisdesModel! {
         didSet{
              epoisdeTitle.text = epoisde.title
-            epoisdeDescription.text = epoisde.description
+            epoisdeDescription.text =  epoisde.description
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM dd, yyyy"
            let dateString = dateFormatter.string(from: epoisde.pubDate)

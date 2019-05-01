@@ -50,6 +50,18 @@ class EpoisdesVC: UITableViewController {
         return 120
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let index = eposdeArray[indexPath.row]
+        
+        let playerEpoisdeView = Bundle.main.loadNibNamed("PlayerEpoisdeView", owner: self, options: nil)?.first as! PlayerEpoisdeView
+        playerEpoisdeView.epoisde = index
+        playerEpoisdeView.frame = view.frame
+        
+        let window = UIApplication.shared.keyWindow
+        window?.addSubview(playerEpoisdeView)
+        
+        
+    }
     func fetchEpoisde()  {
         guard let podcastUrl = podcast?.feedUrl else { return  }
         

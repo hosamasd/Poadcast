@@ -14,13 +14,15 @@ struct EpoisdesModel {
     let pubDate:Date
     let description:String
     var imageUrl:String?
+    let author :String
     
     
     init(feed:RSSFeedItem) {
         self.title = feed.title ?? "no title"
         self.pubDate = feed.pubDate ?? Date()
-        self.description = feed.description ?? "no description"
-        self.imageUrl = feed.iTunes?.iTunesImage?.attributes?.href 
+        self.description = feed.iTunes?.iTunesSubtitle ?? feed.description ?? "no description"
+        self.imageUrl = feed.iTunes?.iTunesImage?.attributes?.href
+        self.author = feed.author ?? ""
     }
 }
 
