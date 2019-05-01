@@ -25,14 +25,19 @@ class PlayerEpoisdeView: UIView {
             epoisdeAuthorLabel.text = epoisde.author
         }
     }
+    @IBOutlet weak var epoisdeSliderValue: UISlider!
+    @IBOutlet weak var currentDurationLabel: UILabel!
+    @IBOutlet weak var totalDurationLabel: UILabel!
     @IBOutlet weak var epoisdeImageView: UIImageView!{
         didSet{
+            epoisdeImageView.layer.cornerRadius = 6
+            epoisdeImageView.clipsToBounds = true
             epoisdeImageView.transform = fixedShrinkVale
         }
     }
     @IBOutlet weak var playPauseButton: UIButton!{
         didSet{
-            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             playPauseButton.addTarget(self, action: #selector(handlPlaying), for: .touchUpInside)
            
         }
@@ -46,8 +51,12 @@ class PlayerEpoisdeView: UIView {
     
     @IBOutlet weak var epoisdeAuthorLabel: UILabel!
    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        observeCurrentPlayerTime()
         
         let time = CMTimeMake(value: 1, timescale: 3)
        let times =  [NSValue(time: time)]
@@ -56,12 +65,60 @@ class PlayerEpoisdeView: UIView {
         }
     }
     
+    @IBAction func rewindSpeedTapped(_ sender: Any) {
+        //minus fifteen seconds to slider
+       seekToCurrentTimes(delta: -15)
+    }
+   
+    
+    @IBAction func fastSpeedTapped(_ sender: Any) {
+        seekToCurrentTimes(delta: 15)
+    }
+    @IBAction func sliderChangeValue(_ sender: UISlider) {
+        let percentage = sender.value
+        
+        guard let totalSec = avPlayer.currentItem?.duration else { return  }
+        let durationInSeconds = CMTimeGetSeconds(totalSec)
+        
+        let seekInSeconds = Float64(percentage) * durationInSeconds
+        let seekTime = CMTimeMakeWithSeconds(seekInSeconds, preferredTimescale: 1)
+        
+        avPlayer.seek(to: seekTime)
+        
+    }
     @IBAction func dimsiiTapped(_ sender: Any) {
                      removeFromSuperview()
        
     }
     
+    @IBAction func sliderChangeSounds(_ sender: UISlider) {
+        avPlayer.volume = sender.value
+    }
     
+    
+    fileprivate func seekToCurrentTimes(delta: Int64) {
+        //add fifteen seconds to slider
+        let fifteenSecond = CMTimeMake(value: delta, timescale: 1)
+        let seekTime = CMTimeAdd(avPlayer.currentTime(), fifteenSecond)
+        
+        avPlayer.seek(to: seekTime)
+    }
+    fileprivate func observeCurrentPlayerTime() {
+        let interval = CMTimeMake(value: 1, timescale: 2)
+        avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
+             self.currentDurationLabel.text = time.toStringDisplay()
+            guard  let duration =   self.avPlayer.currentItem?.duration.toStringDisplay() else{return}
+            self.totalDurationLabel.text = duration
+            self.updateCurrentSlider()
+        }
+    }
+    
+    func updateCurrentSlider()  {
+        let currentSec = CMTimeGetSeconds(avPlayer.currentTime())
+        let total = CMTimeGetSeconds(avPlayer.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        
+    self.epoisdeSliderValue.value = Float(currentSec / total)
+    }
     
     func playEpoisde()  {
         guard let url = URL(string: epoisde.streamUrl ) else { return }
@@ -89,11 +146,11 @@ class PlayerEpoisdeView: UIView {
         if avPlayer.timeControlStatus == .paused  {
             avPlayer.play()
             
-            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             enLargeImageView()
         }else {
             avPlayer.pause()
-            playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
             shrinkImageView()
         }
     }

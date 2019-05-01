@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		25785D36C952219DAF15C31F /* Pods_Poadcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB377CC0517B6EBCAC3DACC9 /* Pods_Poadcast.framework */; };
+		4E5F264A2279E495001702E7 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F26492279E495001702E7 /* CMTime.swift */; };
 		4E72DEA2227897AB00CC16C8 /* SingeltonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */; };
 		4E72DEA522789AEA00CC16C8 /* PodcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E72DEA422789AEA00CC16C8 /* PodcastCell.xib */; };
 		4E72DEA722789D6100CC16C8 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E72DEA622789D6100CC16C8 /* PodcastCell.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E5F26492279E495001702E7 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingeltonAPI.swift; sourceTree = "<group>"; };
 		4E72DEA422789AEA00CC16C8 /* PodcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodcastCell.xib; sourceTree = "<group>"; };
 		4E72DEA622789D6100CC16C8 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */,
+				4E5F26492279E495001702E7 /* CMTime.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				4E72DEA2227897AB00CC16C8 /* SingeltonAPI.swift in Sources */,
 				4E869F052279B70100D474CA /* RSSFeed.swift in Sources */,
 				4E7D373222784C3B007DB63B /* DownloadVC.swift in Sources */,
+				4E5F264A2279E495001702E7 /* CMTime.swift in Sources */,
 				4E83293E22786A1500755EB9 /* ExtensionUivew.swift in Sources */,
 				4E7D371D22784842007DB63B /* SearchVC.swift in Sources */,
 				4E7D372E22784B12007DB63B /* MainTabBarVC.swift in Sources */,
