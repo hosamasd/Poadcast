@@ -20,6 +20,7 @@ class EpoisdesVC: UITableViewController {
         didSet{
             
              navigationItem.title = podcast?.trackName ?? "no title"
+            print(podcast?.feedUrl)
         }
     }
     
