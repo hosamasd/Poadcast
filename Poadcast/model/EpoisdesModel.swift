@@ -7,9 +7,16 @@
 //
 
 import UIKit
-
+import FeedKit
 struct EpoisdesModel {
     let title:String
+    let pubDate:Date
+    let description:String
     
+    init(feed:RSSFeedItem) {
+        self.title = feed.title ?? "no title"
+        self.pubDate = feed.pubDate ?? Date()
+        self.description = feed.description ?? "no description"
+    }
 }
 

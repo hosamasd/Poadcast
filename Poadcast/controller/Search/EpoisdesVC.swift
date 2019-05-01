@@ -7,20 +7,17 @@
 //
 
 import UIKit
+import FeedKit
 
 class EpoisdesVC: UITableViewController {
     let cellID = "cellID"
-    var eposdeArray:[EpoisdesModel] = [
-    EpoisdesModel(title: "one"),
-    EpoisdesModel(title: "two"),
-    EpoisdesModel(title: "thress")
-    ]
+    var eposdeArray:[EpoisdesModel] = []
     
     var podcast:PodcastModel? {
         didSet{
             
              navigationItem.title = podcast?.trackName ?? "no title"
-            print(podcast?.feedUrl)
+            fetchEpoisde()
         }
     }
     
@@ -35,16 +32,49 @@ class EpoisdesVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! EpoisdeCell
         let epoisde = eposdeArray[indexPath.row]
         
-        cell.textLabel?.text = epoisde.title
+        cell.epoisde = epoisde
         
         return cell
     }
  
     func setupTableView()  {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        let nib = UINib(nibName: "EpoisdeCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: cellID)
          tableView.tableFooterView = UIView() // remove lines of cells
+    }
+    
+    func fetchEpoisde()  {
+        guard let podcastUrl = podcast?.feedUrl else { return  }
+        let securePodcastUrl = podcastUrl.contains("https") ? podcastUrl : podcastUrl.replacingOccurrences(of: "http", with: "https")
+        
+        guard let feedUrl =  URL(string: securePodcastUrl) else { return  }
+       let parser = FeedParser(URL: feedUrl)
+        parser.parseAsync { (result) in
+            
+            switch result {
+            case let .rss(feed):
+                var epoisdes = [EpoisdesModel]()
+                feed.items?.forEach({ (feedItem) in
+                 
+                    let epoisde = EpoisdesModel(feed: feedItem)
+                    epoisdes.append(epoisde)
+                })
+                
+                self.eposdeArray = epoisdes
+                DispatchQueue.main.async {
+                     self.tableView.reloadData()
+                }
+               
+                break
+            case let .failure(error):
+                print("not found",error)
+                break
+            default:
+                print("load feed .....")
+            }
+        }
     }
 }
