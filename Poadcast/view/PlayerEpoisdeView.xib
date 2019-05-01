@@ -129,7 +129,6 @@
                 <outlet property="epoisdeImageView" destination="nUB-48-DJr" id="7rd-HF-AwI"/>
                 <outlet property="epoisdeTitleLabel" destination="jHk-mW-5MA" id="ipz-Gr-yBh"/>
                 <outlet property="playPauseButton" destination="yJL-kJ-Nl0" id="pjh-py-xgC"/>
-                <outlet property="playTapped" destination="yJL-kJ-Nl0" id="cP0-gU-2TC"/>
             </connections>
             <point key="canvasLocation" x="17" y="-45"/>
         </view>
