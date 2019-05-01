@@ -14,6 +14,7 @@ class PlayerEpoisdeView: UIView {
         av.automaticallyWaitsToMinimizeStalling = false
         return av
     }()
+    let fixedShrinkVale = CGAffineTransform(scaleX: 0.7, y: 0.7)
     
     var epoisde:EpoisdesModel! {
         didSet{
@@ -24,10 +25,16 @@ class PlayerEpoisdeView: UIView {
             epoisdeAuthorLabel.text = epoisde.author
         }
     }
-     @IBOutlet weak var epoisdeImageView: UIImageView!
+    @IBOutlet weak var epoisdeImageView: UIImageView!{
+        didSet{
+            epoisdeImageView.transform = fixedShrinkVale
+        }
+    }
     @IBOutlet weak var playPauseButton: UIButton!{
         didSet{
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             playPauseButton.addTarget(self, action: #selector(handlPlaying), for: .touchUpInside)
+           
         }
     }
     @IBOutlet weak var epoisdeTitleLabel: UILabel!{
@@ -38,8 +45,20 @@ class PlayerEpoisdeView: UIView {
    
     
     @IBOutlet weak var epoisdeAuthorLabel: UILabel!
+   
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let time = CMTimeMake(value: 1, timescale: 3)
+       let times =  [NSValue(time: time)]
+        avPlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) {
+            self.enLargeImageView()
+        }
+    }
+    
     @IBAction func dimsiiTapped(_ sender: Any) {
-        removeFromSuperview()
+                     removeFromSuperview()
+       
     }
     
     
@@ -52,13 +71,30 @@ class PlayerEpoisdeView: UIView {
         avPlayer.play()
     }
     
+    fileprivate func enLargeImageView() {
+        
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.epoisdeImageView.transform = .identity
+        }, completion: nil)
+    }
+    
+    fileprivate func shrinkImageView() {
+        
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.epoisdeImageView.transform = self.fixedShrinkVale
+        }, completion: nil)
+    }
+    
     @objc func handlPlaying(sender: UIButton)  {
         if avPlayer.timeControlStatus == .paused  {
             avPlayer.play()
+            
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            enLargeImageView()
         }else {
             avPlayer.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            shrinkImageView()
         }
     }
 }
