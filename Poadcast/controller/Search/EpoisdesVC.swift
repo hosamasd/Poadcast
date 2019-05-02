@@ -50,6 +50,17 @@ class EpoisdesVC: UITableViewController {
         return 120
     }
     
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let activityIndicatpr = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicatpr.color = .darkGray
+        activityIndicatpr.startAnimating()
+        return activityIndicatpr
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return eposdeArray.isEmpty ? 200 : 0
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = eposdeArray[indexPath.row]
         

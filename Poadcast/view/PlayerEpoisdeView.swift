@@ -56,13 +56,19 @@ class PlayerEpoisdeView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        // [weak self ] for removing retain cycle of theses clousres
+        
         observeCurrentPlayerTime()
         
         let time = CMTimeMake(value: 1, timescale: 3)
        let times =  [NSValue(time: time)]
-        avPlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) {
-            self.enLargeImageView()
+        avPlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) {[weak self ] in
+            self?.enLargeImageView()
         }
+    }
+    
+    deinit {
+       print("PlayerEpoisdeView reclaimed from memory")
     }
     
     @IBAction func rewindSpeedTapped(_ sender: Any) {
@@ -105,11 +111,11 @@ class PlayerEpoisdeView: UIView {
     }
     fileprivate func observeCurrentPlayerTime() {
         let interval = CMTimeMake(value: 1, timescale: 2)
-        avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-             self.currentDurationLabel.text = time.toStringDisplay()
-            guard  let duration =   self.avPlayer.currentItem?.duration.toStringDisplay() else{return}
-            self.totalDurationLabel.text = duration
-            self.updateCurrentSlider()
+        avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self ] (time) in
+            self?.currentDurationLabel.text = time.toStringDisplay()
+            guard  let duration =   self?.avPlayer.currentItem?.duration.toStringDisplay() else{return}
+            self?.totalDurationLabel.text = duration
+            self?.updateCurrentSlider()
         }
     }
     

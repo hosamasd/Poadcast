@@ -78,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				4E72DEA1227897AB00CC16C8 /* SingeltonAPI.swift */,
-				4E5F26492279E495001702E7 /* CMTime.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -157,6 +156,7 @@
 				4E83293D22786A1500755EB9 /* ExtensionUivew.swift */,
 				4E869F022279B58C00D474CA /* String.swift */,
 				4E869F042279B70100D474CA /* RSSFeed.swift */,
+				4E5F26492279E495001702E7 /* CMTime.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";

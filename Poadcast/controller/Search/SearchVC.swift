@@ -12,7 +12,7 @@ class SearchVC: UITableViewController {
 
     let cellID = "cellID"
     var poadcastArray = [PodcastModel]() 
-    
+    var timer:  Timer?
     lazy var searchBar:UISearchBar = {
        let se = UISearchBar()
         se.placeholder = "enter name"
@@ -93,21 +93,20 @@ class SearchVC: UITableViewController {
 
 extension SearchVC: UISearchBarDelegate {
     
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
-//        if searchText.count <= 0 {
-//            self.poadcastArray.removeAll()
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-        APIServices.shared.getPodcast(text: searchText) { (pods) in
-            self.poadcastArray.append(pods)
-            DispatchQueue.main.async {
+        poadcastArray.removeAll()
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (time) in
+            APIServices.shared.getPodcast(text: searchText) { (pods) in
+                self.poadcastArray.append(pods)
                 self.tableView.reloadData()
+                
+                
             }
-            
-        }
+        })
+        
        
     }
 }
