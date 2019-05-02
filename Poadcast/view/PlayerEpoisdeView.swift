@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import MediaPlayer
 class PlayerEpoisdeView: UIView {
     
     let avPlayer: AVPlayer = {
@@ -22,10 +23,12 @@ class PlayerEpoisdeView: UIView {
             guard let url = URL(string: epoisde.imageUrl ?? "") else { return  }
             epoisdeImageView.sd_setImage(with: url)
             miniEpoisdeImageView.sd_setImage(with: url)
-            playEpoisde()
+            
         epoisdeTitleLabel.text = epoisde.title
             miniEpoisdeTitle.text = epoisde.title
             epoisdeAuthorLabel.text = epoisde.author
+            
+            playEpoisde()
         }
     }
    
@@ -73,10 +76,12 @@ class PlayerEpoisdeView: UIView {
     
     
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        //for playing in background and control auido in this place
+        setupRemoteControl()
+        setupSessionAUdio()
         setupGestures()
         // [weak self ] for removing retain cycle of theses clousres
         
@@ -133,6 +138,41 @@ class PlayerEpoisdeView: UIView {
         gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePantDragged))
        miniPlayerView.addGestureRecognizer(gesture)
         maxStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissPan)))
+    }
+    
+    func setupSessionAUdio()  {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let err {
+            print(err)
+        }
+    }
+    
+    func setupRemoteControl()  {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        let command = MPRemoteCommandCenter.shared()
+        
+        command.playCommand.isEnabled = true
+        command.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.avPlayer.play()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+            self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+            return .success
+        }
+        command.pauseCommand.isEnabled = true
+        command.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.avPlayer.pause()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+            self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+            return .success
+        }
+        
+        command.togglePlayPauseCommand.isEnabled = true
+        command.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.handlPlaying()
+            return .success
+        }
     }
     
     fileprivate func seekToCurrentTimes(delta: Int64) {
@@ -207,7 +247,7 @@ class PlayerEpoisdeView: UIView {
         self.maxStackView.alpha = -translation.y / 200
     }
     
-    @objc func handlPlaying(sender: UIButton)  {
+    @objc func handlPlaying()  {
         if avPlayer.timeControlStatus == .paused  {
             avPlayer.play()
             
