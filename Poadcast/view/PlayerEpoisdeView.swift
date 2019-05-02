@@ -20,18 +20,38 @@ class PlayerEpoisdeView: UIView {
     
     var epoisde:EpoisdesModel! {
         didSet{
-            guard let url = URL(string: epoisde.imageUrl ?? "") else { return  }
-            epoisdeImageView.sd_setImage(with: url)
-            miniEpoisdeImageView.sd_setImage(with: url)
+           
+            
             
         epoisdeTitleLabel.text = epoisde.title
             miniEpoisdeTitle.text = epoisde.title
             epoisdeAuthorLabel.text = epoisde.author
             
             playEpoisde()
+            setupNoewPlayingInfo()
+             guard let url = URL(string: epoisde.imageUrl ?? "") else { return  }
+            epoisdeImageView.sd_setImage(with: url)
+            miniEpoisdeImageView.sd_setImage(with: url) { (image, _, _, _) in
+                guard let img = image else{return}
+                var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
+                //grab artwork
+                let artwork = MPMediaItemArtwork(boundsSize: img.size, requestHandler: { (_) -> UIImage in
+                    return img
+                })
+                nowPlayingInfo?[MPMediaItemPropertyArtwork] = artwork
+                
+                MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+            }
         }
     }
    
+    func setupNoewPlayingInfo()  {
+        var nowPlayingInfo = [String:Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = epoisde.title
+        nowPlayingInfo[MPMediaItemPropertyArtist] = epoisde.author
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
     @IBOutlet weak var miniEpoisdeTitle: UILabel!
     @IBOutlet weak var miniEpoisdeImageView: UIImageView!
     @IBOutlet weak var maxStackView: UIStackView!
@@ -183,16 +203,31 @@ class PlayerEpoisdeView: UIView {
         avPlayer.seek(to: seekTime)
     }
     
+    //for lockscreen appear audio with current time
     fileprivate func observeCurrentPlayerTime() {
         let interval = CMTimeMake(value: 1, timescale: 2)
         avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self ] (time) in
             self?.currentDurationLabel.text = time.toStringDisplay()
             guard  let duration =   self?.avPlayer.currentItem?.duration.toStringDisplay() else{return}
             self?.totalDurationLabel.text = duration
+            
+            self?.setupDurationInLockScreen()
             self?.updateCurrentSlider()
         }
     }
-    
+     //for lockscreen appear audio with current time
+    func setupDurationInLockScreen()  {
+         var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
+        guard let currentTime = avPlayer.currentItem else { return  }
+        let durationSeconds = CMTimeGetSeconds(currentTime.duration)
+        
+        let elipasedTime = CMTimeGetSeconds(avPlayer.currentTime())
+        
+        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elipasedTime
+        nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
     func updateCurrentSlider()  {
         let currentSec = CMTimeGetSeconds(avPlayer.currentTime())
         let total = CMTimeGetSeconds(avPlayer.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
