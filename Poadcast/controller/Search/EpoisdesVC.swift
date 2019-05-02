@@ -64,7 +64,7 @@ class EpoisdesVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = eposdeArray[indexPath.row]
         
-        let playerEpoisdeView = Bundle.main.loadNibNamed("PlayerEpoisdeView", owner: self, options: nil)?.first as! PlayerEpoisdeView
+        let playerEpoisdeView = PlayerEpoisdeView.initFromNib()
         playerEpoisdeView.epoisde = index
         playerEpoisdeView.frame = view.frame
         

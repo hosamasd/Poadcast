@@ -10,14 +10,34 @@ import UIKit
 
 class MainTabBarVC: UITabBarController {
     
+    var maximizeTopAnchorConstraint:NSLayoutConstraint!
+    var minimizeTopAnchorConstraint:NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
        
         
         setupViewControllers()
+        setupPlayerEpoisdeView()
+        
+//        perform(#selector(handleMinimizePlayerView), with: nil, afterDelay: 1)
+         perform(#selector(handleMaximizePlayerView), with: nil, afterDelay: 3)
     }
     
     //MARK: -USER METHODS
+    
+    func setupPlayerEpoisdeView()  {
+        let players = PlayerEpoisdeView.initFromNib()
+        players.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(players, belowSubview: tabBar)
+        
+        players.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: view.frame.height, left: 0, bottom: 0, right: 0))
+        maximizeTopAnchorConstraint = players.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height)
+        print(maximizeTopAnchorConstraint)
+        maximizeTopAnchorConstraint.isActive = true
+        minimizeTopAnchorConstraint = players.topAnchor.constraint(equalTo: tabBar.topAnchor, constant: -64)
+         print(minimizeTopAnchorConstraint)
+//        minimizeTopAnchorConstraint.isActive = true
+    }
     
     fileprivate func setupViewControllers() {
         
@@ -51,6 +71,28 @@ class MainTabBarVC: UITabBarController {
         navController.tabBarItem.image = selectedImage
         return navController
     }
+    
+    //TODO:- HANDLE METHODS
+    
+   @objc func handleMinimizePlayerView()  {
+        maximizeTopAnchorConstraint.isActive = false
+    minimizeTopAnchorConstraint.isActive = true
+    
+    UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+        self.view.layoutIfNeeded()
+    })
+    }
+    
+    @objc func handleMaximizePlayerView()  {
+        maximizeTopAnchorConstraint.isActive = true
+        maximizeTopAnchorConstraint.constant = 0
+        minimizeTopAnchorConstraint.isActive = false
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
 }
 //extension MainTabBarVC: UITabBarControllerDelegate {
 //

@@ -67,6 +67,9 @@ class PlayerEpoisdeView: UIView {
         }
     }
     
+    static func initFromNib() -> PlayerEpoisdeView {
+        return Bundle.main.loadNibNamed("PlayerEpoisdeView", owner: self, options: nil)?.first as! PlayerEpoisdeView
+    }
     deinit {
        print("PlayerEpoisdeView reclaimed from memory")
     }
