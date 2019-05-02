@@ -64,12 +64,15 @@ class EpoisdesVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = eposdeArray[indexPath.row]
         
-        let playerEpoisdeView = PlayerEpoisdeView.initFromNib()
-        playerEpoisdeView.epoisde = index
-        playerEpoisdeView.frame = view.frame
+        let main = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
+        main?.handleMaximizePlayerView(epoisde: index)
         
-        let window = UIApplication.shared.keyWindow
-        window?.addSubview(playerEpoisdeView)
+//        let playerEpoisdeView = PlayerEpoisdeView.initFromNib()
+//        playerEpoisdeView.epoisde = index
+//        playerEpoisdeView.frame = view.frame
+//
+//        let window = UIApplication.shared.keyWindow
+//        window?.addSubview(playerEpoisdeView)
         
         
     }

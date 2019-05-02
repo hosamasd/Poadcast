@@ -9,7 +9,7 @@
 import UIKit
 
 class MainTabBarVC: UITabBarController {
-    
+     let players = PlayerEpoisdeView.initFromNib()
     var maximizeTopAnchorConstraint:NSLayoutConstraint!
     var minimizeTopAnchorConstraint:NSLayoutConstraint!
     override func viewDidLoad() {
@@ -20,13 +20,13 @@ class MainTabBarVC: UITabBarController {
         setupPlayerEpoisdeView()
         
 //        perform(#selector(handleMinimizePlayerView), with: nil, afterDelay: 1)
-         perform(#selector(handleMaximizePlayerView), with: nil, afterDelay: 3)
+//         perform(#selector(handleMaximizePlayerView), with: nil, afterDelay: 1)
     }
     
     //MARK: -USER METHODS
     
     func setupPlayerEpoisdeView()  {
-        let players = PlayerEpoisdeView.initFromNib()
+       
         players.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(players, belowSubview: tabBar)
         
@@ -80,16 +80,23 @@ class MainTabBarVC: UITabBarController {
     
     UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
         self.view.layoutIfNeeded()
+         self.tabBar.transform = .identity
     })
     }
     
-    @objc func handleMaximizePlayerView()  {
+     func handleMaximizePlayerView(epoisde:EpoisdesModel?)  {
         maximizeTopAnchorConstraint.isActive = true
         maximizeTopAnchorConstraint.constant = 0
         minimizeTopAnchorConstraint.isActive = false
         
+        if epoisde != nil {
+             players.epoisde = epoisde
+        }
+       
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
+            self.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
         })
     }
     

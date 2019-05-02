@@ -56,6 +56,7 @@ class PlayerEpoisdeView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMaximizeView)))
         // [weak self ] for removing retain cycle of theses clousres
         
         observeCurrentPlayerTime()
@@ -96,7 +97,10 @@ class PlayerEpoisdeView: UIView {
         
     }
     @IBAction func dimsiiTapped(_ sender: Any) {
-                     removeFromSuperview()
+//                     removeFromSuperview()
+        let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
+        mainTab?.handleMinimizePlayerView()
+        
        
     }
     
@@ -112,6 +116,7 @@ class PlayerEpoisdeView: UIView {
         
         avPlayer.seek(to: seekTime)
     }
+    
     fileprivate func observeCurrentPlayerTime() {
         let interval = CMTimeMake(value: 1, timescale: 2)
         avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self ] (time) in
@@ -162,5 +167,10 @@ class PlayerEpoisdeView: UIView {
             playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
             shrinkImageView()
         }
+    }
+    
+    @objc func handleMaximizeView(){
+        let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
+        mainTab?.handleMaximizePlayerView(epoisde: nil)
     }
 }
