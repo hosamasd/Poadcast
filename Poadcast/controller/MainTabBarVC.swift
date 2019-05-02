@@ -81,6 +81,9 @@ class MainTabBarVC: UITabBarController {
     UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
         self.view.layoutIfNeeded()
          self.tabBar.transform = .identity
+        
+        self.players.maxStackView.alpha = 0
+        self.players.miniPlayerView.alpha = 1
     })
     }
     
@@ -97,6 +100,9 @@ class MainTabBarVC: UITabBarController {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()
             self.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+            
+            self.players.maxStackView.alpha = 1
+            self.players.miniPlayerView.alpha = 0
         })
     }
     

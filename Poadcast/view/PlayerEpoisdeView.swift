@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 class PlayerEpoisdeView: UIView {
+    
     let avPlayer: AVPlayer = {
        let av = AVPlayer()
         av.automaticallyWaitsToMinimizeStalling = false
@@ -20,11 +21,18 @@ class PlayerEpoisdeView: UIView {
         didSet{
             guard let url = URL(string: epoisde.imageUrl ?? "") else { return  }
             epoisdeImageView.sd_setImage(with: url)
+            miniEpoisdeImageView.sd_setImage(with: url)
             playEpoisde()
         epoisdeTitleLabel.text = epoisde.title
+            miniEpoisdeTitle.text = epoisde.title
             epoisdeAuthorLabel.text = epoisde.author
         }
     }
+   
+    @IBOutlet weak var miniEpoisdeTitle: UILabel!
+    @IBOutlet weak var miniEpoisdeImageView: UIImageView!
+    @IBOutlet weak var maxStackView: UIStackView!
+    @IBOutlet weak var miniPlayerView: UIView!
     @IBOutlet weak var epoisdeSliderValue: UISlider!
     @IBOutlet weak var currentDurationLabel: UILabel!
     @IBOutlet weak var totalDurationLabel: UILabel!
@@ -47,7 +55,17 @@ class PlayerEpoisdeView: UIView {
             epoisdeTitleLabel.numberOfLines = 2
         }
     }
-   
+    @IBOutlet weak var miniEpoisdeForwardButton: UIButton!{
+        didSet{
+            miniEpoisdeForwardButton.addTarget(self, action: #selector(fastSpeedTapped(_:)), for: .touchUpInside)
+        }
+    }
+    @IBOutlet weak var miniEpoisdePauseButton: UIButton!{
+        didSet{
+            miniEpoisdePauseButton.addTarget(self, action: #selector(handlPlaying), for: .touchUpInside)
+            
+        }
+    }
     
     @IBOutlet weak var epoisdeAuthorLabel: UILabel!
    
@@ -75,14 +93,14 @@ class PlayerEpoisdeView: UIView {
        print("PlayerEpoisdeView reclaimed from memory")
     }
     
-    @IBAction func rewindSpeedTapped(_ sender: Any) {
+    @IBAction func fastSpeedTapped(_ sender: Any) {
         //minus fifteen seconds to slider
-       seekToCurrentTimes(delta: -15)
+       seekToCurrentTimes(delta: 15)
     }
    
     
-    @IBAction func fastSpeedTapped(_ sender: Any) {
-        seekToCurrentTimes(delta: 15)
+    @IBAction func reWindSpeedTapped(_ sender: Any) {
+        seekToCurrentTimes(delta: -15)
     }
     @IBAction func sliderChangeValue(_ sender: UISlider) {
         let percentage = sender.value
@@ -161,10 +179,12 @@ class PlayerEpoisdeView: UIView {
             avPlayer.play()
             
             playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+             miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             enLargeImageView()
         }else {
             avPlayer.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+             miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
             shrinkImageView()
         }
     }
