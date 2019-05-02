@@ -12,6 +12,7 @@ class MainTabBarVC: UITabBarController {
      let players = PlayerEpoisdeView.initFromNib()
     var maximizeTopAnchorConstraint:NSLayoutConstraint!
     var minimizeTopAnchorConstraint:NSLayoutConstraint!
+     var bottomAnchorConstraint:NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -30,12 +31,16 @@ class MainTabBarVC: UITabBarController {
         players.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(players, belowSubview: tabBar)
         
-        players.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: view.frame.height, left: 0, bottom: 0, right: 0))
+//        players.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: view.frame.height, left: 0, bottom: view.frame.height, right: 0))
         maximizeTopAnchorConstraint = players.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height)
-        print(maximizeTopAnchorConstraint)
         maximizeTopAnchorConstraint.isActive = true
+        
+        bottomAnchorConstraint = players.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.frame.height)
+        bottomAnchorConstraint.isActive = true
         minimizeTopAnchorConstraint = players.topAnchor.constraint(equalTo: tabBar.topAnchor, constant: -64)
-         print(minimizeTopAnchorConstraint)
+        
+        players.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        players.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 //        minimizeTopAnchorConstraint.isActive = true
     }
     
@@ -76,6 +81,7 @@ class MainTabBarVC: UITabBarController {
     
    @objc func handleMinimizePlayerView()  {
         maximizeTopAnchorConstraint.isActive = false
+    bottomAnchorConstraint.constant = view.frame.height
     minimizeTopAnchorConstraint.isActive = true
     
     UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
@@ -88,10 +94,11 @@ class MainTabBarVC: UITabBarController {
     }
     
      func handleMaximizePlayerView(epoisde:EpoisdesModel?)  {
+        minimizeTopAnchorConstraint.isActive = false
         maximizeTopAnchorConstraint.isActive = true
         maximizeTopAnchorConstraint.constant = 0
-        minimizeTopAnchorConstraint.isActive = false
         
+        bottomAnchorConstraint.constant = 0
         if epoisde != nil {
              players.epoisde = epoisde
         }

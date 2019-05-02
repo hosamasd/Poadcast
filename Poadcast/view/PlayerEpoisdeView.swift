@@ -69,12 +69,15 @@ class PlayerEpoisdeView: UIView {
     
     @IBOutlet weak var epoisdeAuthorLabel: UILabel!
    
+    var gesture:UIPanGestureRecognizer!
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMaximizeView)))
+        gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePantDragged))
+        addGestureRecognizer(gesture)
         // [weak self ] for removing retain cycle of theses clousres
         
         observeCurrentPlayerTime()
@@ -118,7 +121,7 @@ class PlayerEpoisdeView: UIView {
 //                     removeFromSuperview()
         let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
         mainTab?.handleMinimizePlayerView()
-        
+        gesture.isEnabled = true
        
     }
     
@@ -174,6 +177,31 @@ class PlayerEpoisdeView: UIView {
         }, completion: nil)
     }
     
+    func panGestureEnded(gesture: UIPanGestureRecognizer)  {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.transform = .identity
+            
+            let translation = gesture.translation(in: self.superview)
+            let velosity = gesture.velocity(in: self.superview)
+            if translation.y < -200 || velosity.y < -500{
+                self.handleMaximizeView()
+                gesture.isEnabled = false
+            }else{
+                self.miniPlayerView.alpha = 1
+                self.maxStackView.alpha = 0
+            }
+            
+        })
+    }
+    
+    func panGestureChanegd(gesture: UIPanGestureRecognizer)  {
+        let translation = gesture.translation(in: self.superview)
+        self.transform = CGAffineTransform(translationX: 0, y: translation.y)
+        
+        self.miniPlayerView.alpha = 1 + translation.y / 200
+        self.maxStackView.alpha = -translation.y / 200
+    }
+    
     @objc func handlPlaying(sender: UIButton)  {
         if avPlayer.timeControlStatus == .paused  {
             avPlayer.play()
@@ -192,5 +220,17 @@ class PlayerEpoisdeView: UIView {
     @objc func handleMaximizeView(){
         let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
         mainTab?.handleMaximizePlayerView(epoisde: nil)
+        gesture.isEnabled = false
+    }
+    
+    @objc  func handlePantDragged(gesture: UIPanGestureRecognizer  )  {
+        
+        if gesture.state == .changed{
+          panGestureChanegd(gesture: gesture)
+        }else if gesture.state == .ended{
+           
+           panGestureEnded(gesture: gesture)
+         
+        }
     }
 }
