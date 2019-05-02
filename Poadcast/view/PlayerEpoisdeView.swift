@@ -72,12 +72,12 @@ class PlayerEpoisdeView: UIView {
     var gesture:UIPanGestureRecognizer!
     
     
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMaximizeView)))
-        gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePantDragged))
-        addGestureRecognizer(gesture)
+        setupGestures()
         // [weak self ] for removing retain cycle of theses clousres
         
         observeCurrentPlayerTime()
@@ -121,14 +121,19 @@ class PlayerEpoisdeView: UIView {
 //                     removeFromSuperview()
         let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
         mainTab?.handleMinimizePlayerView()
-        gesture.isEnabled = true
-       
+//       gesture.isEnabled = true
     }
     
     @IBAction func sliderChangeSounds(_ sender: UISlider) {
         avPlayer.volume = sender.value
     }
     
+    fileprivate func setupGestures() {
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMaximizeView)))
+        gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePantDragged))
+       miniPlayerView.addGestureRecognizer(gesture)
+        maxStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissPan)))
+    }
     
     fileprivate func seekToCurrentTimes(delta: Int64) {
         //add fifteen seconds to slider
@@ -185,7 +190,7 @@ class PlayerEpoisdeView: UIView {
             let velosity = gesture.velocity(in: self.superview)
             if translation.y < -200 || velosity.y < -500{
                 self.handleMaximizeView()
-                gesture.isEnabled = false
+//                gesture.isEnabled = false
             }else{
                 self.miniPlayerView.alpha = 1
                 self.maxStackView.alpha = 0
@@ -218,9 +223,9 @@ class PlayerEpoisdeView: UIView {
     }
     
     @objc func handleMaximizeView(){
-        let mainTab = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
-        mainTab?.handleMaximizePlayerView(epoisde: nil)
-        gesture.isEnabled = false
+      
+        UIApplication.getMainTabBarController()?.handleMaximizePlayerView(epoisde: nil)
+//        gesture.isEnabled = false
     }
     
     @objc  func handlePantDragged(gesture: UIPanGestureRecognizer  )  {
@@ -231,6 +236,23 @@ class PlayerEpoisdeView: UIView {
            
            panGestureEnded(gesture: gesture)
          
+        }
+    }
+    
+    @objc func handleDismissPan(gesture: UIPanGestureRecognizer){
+        
+       if gesture.state == .changed {
+         let translation = gesture.translation(in: self.superview)
+        maxStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
+       }else if gesture.state == .ended {
+        let translation = gesture.translation(in: self.superview)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            
+            self.maxStackView.transform = .identity
+            if translation.y > 60 {
+            UIApplication.getMainTabBarController()?.handleMinimizePlayerView()
+            }})
+        
         }
     }
 }
