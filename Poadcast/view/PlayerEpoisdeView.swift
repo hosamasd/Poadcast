@@ -321,13 +321,31 @@ class PlayerEpoisdeView: UIView {
     }
     
     func playEpoisde()  {
+        if epoisde.fileUrl != nil {
+          playEpoisdeUsingFileUrl()
+        }else {
         guard let url = URL(string: epoisde.streamUrl ) else { return }
         let playerItem = AVPlayerItem(url: url)
         
         avPlayer.replaceCurrentItem(with: playerItem)
         avPlayer.play()
+        }
     }
     
+    func playEpoisdeUsingFileUrl()  {
+        guard let fileUrl   = URL(string: epoisde.fileUrl ?? "" ) else {return}
+        
+        let fileName = fileUrl.lastPathComponent
+        
+        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        
+        trueLocation.appendPathComponent(fileName)
+        
+        let playerItem = AVPlayerItem(url: trueLocation)
+        
+        avPlayer.replaceCurrentItem(with: playerItem)
+        avPlayer.play()
+    }
     fileprivate func enLargeImageView() {
         
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
