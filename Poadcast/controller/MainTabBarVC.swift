@@ -46,17 +46,19 @@ class MainTabBarVC: UITabBarController {
     
     fileprivate func setupViewControllers() {
         
+        let layout = UICollectionViewFlowLayout()
         
-        let favorite = templateNavControllerVC(title: "favorite", selectedImage: #imageLiteral(resourceName: "play-button"), rootViewController: FavoriteVC())
+        
+        let favorite = templateNavControllerVC(title: "Favorite", selectedImage: #imageLiteral(resourceName: "play-button"), rootViewController: FavoriteVC(collectionViewLayout: layout))
         let search = templateNavControllerVC(title: "search", selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: SearchVC() )
-        let download = templateNavControllerVC(title: "downloads", selectedImage: #imageLiteral(resourceName: "download"), rootViewController: DownloadVC())
+        let download = templateNavControllerVC(title: "Downloads", selectedImage: #imageLiteral(resourceName: "download"), rootViewController: DownloadVC())
        
         
         tabBar.tintColor = .black
         
         viewControllers = [
-           search ,
             favorite,
+           search ,
             download
             ]
         

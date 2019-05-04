@@ -25,6 +25,7 @@ class PlayerEpoisdeView: UIView {
             miniEpoisdeTitle.text = epoisde.title
             epoisdeAuthorLabel.text = epoisde.author
             
+             setupSessionAUdio()
             playEpoisde()
             setupNoewPlayingInfo()
              guard let url = URL(string: epoisde.imageUrl ?? "") else { return  }
@@ -94,12 +95,12 @@ class PlayerEpoisdeView: UIView {
         
         //for playing in background and control auido in this place
         setupRemoteControl()
-        setupSessionAUdio()
+       
         setupGestures()
         // [weak self ] for removing retain cycle of theses clousres
         
         observeCurrentPlayerTime()
-        
+        setupInterruptionObserver()
         observeBoundaryTime()
     }
     
@@ -143,6 +144,32 @@ class PlayerEpoisdeView: UIView {
         avPlayer.volume = sender.value
     }
     
+    //for any calling incoming
+    func setupInterruptionObserver()  {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+    }
+    
+    @objc func handleInterruption(notify: Notification){
+      guard let userInfo = notify.userInfo else { return  }
+        let typeKey =  userInfo[AVAudioSessionInterruptionTypeKey] as? UInt
+        
+        if typeKey == AVAudioSession.InterruptionType.began.rawValue {
+            print("interruption begin")
+            playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+            miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+        }else {
+            print(" interruption ended")
+            guard let options = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else {return }
+            
+            if options == AVAudioSession.InterruptionOptions.shouldResume.rawValue {
+            avPlayer.play()
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+            miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+        }
+       
+        }
+    }
+    
     fileprivate func setupGestures() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMaximizeView)))
         gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePantDragged))
@@ -178,7 +205,8 @@ class PlayerEpoisdeView: UIView {
             self.avPlayer.play()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
             self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
-            self.elipshedTime()
+            self.elipshedTime(playbackRate: 1)
+           
             return .success
         }
         command.pauseCommand.isEnabled = true
@@ -187,7 +215,7 @@ class PlayerEpoisdeView: UIView {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             
-            self.elipshedTime()
+            self.elipshedTime(playbackRate: 0)
             return .success
         }
         
@@ -242,10 +270,11 @@ class PlayerEpoisdeView: UIView {
         self.epoisde = nextEpoisde
     }
     
-    func elipshedTime()  {
+    func elipshedTime(playbackRate: Float)  {
         let elipshedTime = CMTimeGetSeconds(avPlayer.currentTime())
         
          MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = elipshedTime
+         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
     }
     fileprivate func observeBoundaryTime() {
         let time = CMTimeMake(value: 1, timescale: 3)
