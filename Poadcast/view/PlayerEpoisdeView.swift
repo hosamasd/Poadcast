@@ -21,9 +21,7 @@ class PlayerEpoisdeView: UIView {
     var epoisde:EpoisdesModel! {
         didSet{
            
-            
-            
-        epoisdeTitleLabel.text = epoisde.title
+          epoisdeTitleLabel.text = epoisde.title
             miniEpoisdeTitle.text = epoisde.title
             epoisdeAuthorLabel.text = epoisde.author
             
@@ -45,13 +43,9 @@ class PlayerEpoisdeView: UIView {
         }
     }
    
-    func setupNoewPlayingInfo()  {
-        var nowPlayingInfo = [String:Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = epoisde.title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = epoisde.author
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    }
+    var playListEpoisde = [EpoisdesModel]()
+    
+    
     @IBOutlet weak var miniEpoisdeTitle: UILabel!
     @IBOutlet weak var miniEpoisdeImageView: UIImageView!
     @IBOutlet weak var maxStackView: UIStackView!
@@ -95,7 +89,6 @@ class PlayerEpoisdeView: UIView {
     var gesture:UIPanGestureRecognizer!
     
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -107,11 +100,7 @@ class PlayerEpoisdeView: UIView {
         
         observeCurrentPlayerTime()
         
-        let time = CMTimeMake(value: 1, timescale: 3)
-       let times =  [NSValue(time: time)]
-        avPlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) {[weak self ] in
-            self?.enLargeImageView()
-        }
+        observeBoundaryTime()
     }
     
     static func initFromNib() -> PlayerEpoisdeView {
@@ -139,6 +128,7 @@ class PlayerEpoisdeView: UIView {
         let seekInSeconds = Float64(percentage) * durationInSeconds
         let seekTime = CMTimeMakeWithSeconds(seekInSeconds, preferredTimescale: 1)
         
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekInSeconds
         avPlayer.seek(to: seekTime)
         
     }
@@ -169,6 +159,16 @@ class PlayerEpoisdeView: UIView {
         }
     }
     
+    // for locakscreen mode
+    
+    func setupNoewPlayingInfo()  {
+        var nowPlayingInfo = [String:Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = epoisde.title
+        nowPlayingInfo[MPMediaItemPropertyArtist] = epoisde.author
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+    
     func setupRemoteControl()  {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let command = MPRemoteCommandCenter.shared()
@@ -178,6 +178,7 @@ class PlayerEpoisdeView: UIView {
             self.avPlayer.play()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
             self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "play-button-1"), for: .normal)
+            self.elipshedTime()
             return .success
         }
         command.pauseCommand.isEnabled = true
@@ -185,6 +186,8 @@ class PlayerEpoisdeView: UIView {
             self.avPlayer.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
             self.miniEpoisdePauseButton.setImage(#imageLiteral(resourceName: "pause-button"), for: .normal)
+            
+            self.elipshedTime()
             return .success
         }
         
@@ -192,6 +195,64 @@ class PlayerEpoisdeView: UIView {
         command.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
             self.handlPlaying()
             return .success
+        }
+        command.nextTrackCommand.addTarget(self, action: #selector(handleNextEpoisde))
+        command.previousTrackCommand.addTarget(self, action: #selector(handlePreviousEpoisde))
+    }
+    @objc func handlePreviousEpoisde(){
+        if playListEpoisde.count == 0  {
+            return
+        }
+        
+        let currenIndex = playListEpoisde.index {(ep) -> Bool in
+            return self.epoisde.title == ep.title &&
+                self.epoisde.author == ep.author
+        }
+        
+        guard let index = currenIndex else { return  }
+        
+        let previousEpoisde:EpoisdesModel
+        if index == playListEpoisde.count - 1 {
+            previousEpoisde = playListEpoisde[index]
+        }else {
+            previousEpoisde = playListEpoisde[0]
+        }
+        
+        self.epoisde = previousEpoisde
+    }
+    @objc func handleNextEpoisde(){
+        
+        if playListEpoisde.count == 0 {
+            return
+        }
+        let currenIndex = playListEpoisde.index {(ep) -> Bool in
+            return self.epoisde.title == ep.title &&
+            self.epoisde.author == ep.author
+        }
+        
+        guard let index = currenIndex else { return  }
+        
+        let nextEpoisde:EpoisdesModel
+        if index == playListEpoisde.count - 1 {
+            nextEpoisde = playListEpoisde[0]
+        }else {
+            nextEpoisde = playListEpoisde[index + 1]
+        }
+       
+        self.epoisde = nextEpoisde
+    }
+    
+    func elipshedTime()  {
+        let elipshedTime = CMTimeGetSeconds(avPlayer.currentTime())
+        
+         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = elipshedTime
+    }
+    fileprivate func observeBoundaryTime() {
+        let time = CMTimeMake(value: 1, timescale: 3)
+        let times =  [NSValue(time: time)]
+        avPlayer.addBoundaryTimeObserver(forTimes: times, queue: .main) {[weak self ] in
+            self?.enLargeImageView()
+            self?.setupDurationInLockScreen()
         }
     }
     
@@ -211,23 +272,18 @@ class PlayerEpoisdeView: UIView {
             guard  let duration =   self?.avPlayer.currentItem?.duration.toStringDisplay() else{return}
             self?.totalDurationLabel.text = duration
             
-            self?.setupDurationInLockScreen()
+//            self?.setupDurationInLockScreen()
             self?.updateCurrentSlider()
         }
     }
      //for lockscreen appear audio with current time
     func setupDurationInLockScreen()  {
-         var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
-        guard let currentTime = avPlayer.currentItem else { return  }
-        let durationSeconds = CMTimeGetSeconds(currentTime.duration)
+        guard let duration = avPlayer.currentItem?.duration else { return  }
+        let seconds = CMTimeGetSeconds(duration)
         
-        let elipasedTime = CMTimeGetSeconds(avPlayer.currentTime())
-        
-        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elipasedTime
-        nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seconds
     }
+    
     func updateCurrentSlider()  {
         let currentSec = CMTimeGetSeconds(avPlayer.currentTime())
         let total = CMTimeGetSeconds(avPlayer.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))

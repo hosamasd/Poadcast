@@ -93,7 +93,7 @@ class MainTabBarVC: UITabBarController {
     })
     }
     
-     func handleMaximizePlayerView(epoisde:EpoisdesModel?)  {
+    func handleMaximizePlayerView(epoisde:EpoisdesModel?,playlist: [EpoisdesModel] = [])  {
         minimizeTopAnchorConstraint.isActive = false
         maximizeTopAnchorConstraint.isActive = true
         maximizeTopAnchorConstraint.constant = 0
@@ -103,6 +103,7 @@ class MainTabBarVC: UITabBarController {
              players.epoisde = epoisde
         }
        
+        players.playListEpoisde = playlist
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             self.view.layoutIfNeeded()

@@ -65,7 +65,7 @@ class EpoisdesVC: UITableViewController {
         let index = eposdeArray[indexPath.row]
         
         let main = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
-        main?.handleMaximizePlayerView(epoisde: index)
+        main?.handleMaximizePlayerView(epoisde: index,playlist: self.eposdeArray)
         
 //        let playerEpoisdeView = PlayerEpoisdeView.initFromNib()
 //        playerEpoisdeView.epoisde = index
