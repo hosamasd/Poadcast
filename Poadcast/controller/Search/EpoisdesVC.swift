@@ -79,12 +79,10 @@ class EpoisdesVC: UITableViewController {
         }
         
      
-        showHighlightTapped()
+        showHighlightTapped(index: 0)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleUnLike))
     }
-    func showHighlightTapped()  {
-        UIApplication.getMainTabBarController()?.viewControllers?[0].tabBarItem.badgeValue = "new"
-    }
+   
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eposdeArray.count
     }
@@ -104,6 +102,15 @@ class EpoisdesVC: UITableViewController {
          tableView.tableFooterView = UIView() // remove lines of cells
     }
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let downloadACT = UITableViewRowAction(style: .normal, title: "Download") { (_, _) in
+            let epoisde = self.eposdeArray[indexPath.row]
+            UserDefaults.standard.downloadEpoisde(epoisde: epoisde)
+            self.showHighlightTapped(index: 2)
+        }
+        
+        return [downloadACT]
+    }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
@@ -133,6 +140,10 @@ class EpoisdesVC: UITableViewController {
 //        window?.addSubview(playerEpoisdeView)
         
         
+    }
+    
+    func showHighlightTapped(index: Int)  {
+        UIApplication.getMainTabBarController()?.viewControllers?[index].tabBarItem.badgeValue = "New"
     }
     func fetchEpoisde()  {
         guard let podcastUrl = podcast?.feedUrl else { return  }

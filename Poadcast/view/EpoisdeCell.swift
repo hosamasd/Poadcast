@@ -31,6 +31,5 @@ class EpoisdeCell: UITableViewCell {
              let url =  URL(string: epoisde.imageUrl?.toSecrueHttps() ?? "")
            epoisdeImage.sd_setImage(with: url, completed: nil)
         }
-        
     }
 }

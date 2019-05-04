@@ -8,7 +8,7 @@
 
 import UIKit
 import FeedKit
-struct EpoisdesModel {
+struct EpoisdesModel: Codable {
     
     let title:String
     let pubDate:Date

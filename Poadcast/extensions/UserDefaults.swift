@@ -10,6 +10,7 @@ import Foundation
 
 extension UserDefaults {
     static let ketTrack = "ketTrack"
+    static let downloadEpoisdeKey = "downloadEpoisdeKey"
     func savePodcasts() -> [PodcastModel] {
         guard let keys = UserDefaults.standard.data(forKey: UserDefaults.ketTrack) else {return []}
         guard let podcasts = NSKeyedUnarchiver.unarchiveObject(with: keys) as? [PodcastModel] else {return []}
@@ -17,6 +18,28 @@ extension UserDefaults {
         return podcasts
     }
     
+    func downloadEpoisde(epoisde: EpoisdesModel)  {
+        var dowloadedEpoisdes = downloadedEpoisde()
+        dowloadedEpoisdes.append(epoisde)
+        do {
+          let data =   try JSONEncoder().encode(dowloadedEpoisdes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpoisdeKey)
+        } catch let err {
+            print("failed to encode ",err.localizedDescription)
+        }
+      }
+    
+    func downloadedEpoisde() -> [EpoisdesModel] {
+        guard let data = data(forKey: UserDefaults.downloadEpoisdeKey) else { return [] }
+        
+        do {
+          let epoisde =   try JSONDecoder().decode([EpoisdesModel].self, from: data)
+            return epoisde
+        } catch let err {
+            print("can not reterive data ",err.localizedDescription)
+        }
+        return []
+    }
     func deletePodcast(pod: PodcastModel)  {
         let podcasts = savePodcasts()
         let filterPod = podcasts.filter { (p) -> Bool in
