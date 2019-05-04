@@ -14,6 +14,31 @@ class APIServices {
      let baseUrlItunes = "https://itunes.apple.com/search"
     static let shared = APIServices()
     
+    func downloadEpoisde(epoisde: EpoisdesModel)  {
+        let downloadRequest = DownloadRequest.suggestedDownloadDestination()
+        
+        Alamofire.download(epoisde.streamUrl, to: downloadRequest).downloadProgress { (progress) in
+            print(progress.fractionCompleted)
+            }.response { (res) in
+                guard let fileUrl =  res.destinationURL?.absoluteString else {return}
+                
+                var downloadeEpoisde = UserDefaults.standard.downloadedEpoisde()
+                guard let index = downloadeEpoisde.index(where: {
+                    $0.author == epoisde.author &&
+                    $0.title == epoisde.title
+                }) else {return}
+                
+                downloadeEpoisde[index].fileUrl = fileUrl
+                do{
+                    let data = try JSONEncoder().encode(downloadeEpoisde)
+                    UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpoisdeKey)
+                    
+                }catch let err {
+                    print("can not encode with file url ",err)
+                }
+        }
+    }
+    
     func fetchEpoisdes(feedUrl:String,completion:  @escaping ([EpoisdesModel])->())  {
         
         

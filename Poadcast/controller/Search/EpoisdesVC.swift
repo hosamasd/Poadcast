@@ -106,7 +106,9 @@ class EpoisdesVC: UITableViewController {
         let downloadACT = UITableViewRowAction(style: .normal, title: "Download") { (_, _) in
             let epoisde = self.eposdeArray[indexPath.row]
             UserDefaults.standard.downloadEpoisde(epoisde: epoisde)
-            self.showHighlightTapped(index: 2)
+//            self.showHighlightTapped(index: 2)
+            
+            APIServices.shared.downloadEpoisde(epoisde: epoisde)
         }
         
         return [downloadACT]
