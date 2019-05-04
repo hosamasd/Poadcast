@@ -25,8 +25,66 @@ class EpoisdesVC: UITableViewController {
         super.viewDidLoad()
        
         setupTableView()
+         setupNvaigationItemsButton()
     }
     
+    
+    func setupNvaigationItemsButton()  {
+        let savedPodcasts = UserDefaults.standard.savePodcasts()
+        
+        let hasFavorite = savedPodcasts.index(where: {
+            $0.artistName == self.podcast?.artistName &&
+            $0.trackName == self.podcast?.trackName
+        }) != nil
+        
+        if hasFavorite {
+            // heart icon
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleUnLike))
+        }else{
+        
+       navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorite", style: .plain, target: self, action: #selector(handleFavorit))
+        
+        }
+    }
+    
+    @objc func handleUnLike(){
+        print(222)
+    }
+    
+    @objc func handleFetch(){
+        print("fetch")
+        guard let keys = UserDefaults.standard.data(forKey: UserDefaults.ketTrack) else {return}
+        do {
+            let podcasts = NSKeyedUnarchiver.unarchiveObject(with: keys) as? [PodcastModel]
+            
+            podcasts?.forEach({ (p) in
+                print(p.trackName ?? "")
+            })
+        } catch let err {
+            print("can not loaded saved data ",err.localizedDescription)
+        }
+        
+        
+    }
+    @objc func handleFavorit(){
+      guard  let podcaset = self.podcast else {return}
+        //podcast to data
+        do {
+            var listOfPodcast = UserDefaults.standard.savePodcasts()
+            listOfPodcast.append(podcaset)
+           let data =   try NSKeyedArchiver.archivedData(withRootObject: listOfPodcast, requiringSecureCoding: false)
+             UserDefaults.standard.set(data, forKey: UserDefaults.ketTrack)
+        } catch let err {
+            print("can not to saveed ",err.localizedDescription)
+        }
+        
+     
+        showHighlightTapped()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleUnLike))
+    }
+    func showHighlightTapped()  {
+        UIApplication.getMainTabBarController()?.viewControllers?[0].tabBarItem.badgeValue = "new"
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eposdeArray.count
     }

@@ -19,13 +19,14 @@ class MainTabBarVC: UITabBarController {
         
         setupViewControllers()
         setupPlayerEpoisdeView()
-        
+       
 //        perform(#selector(handleMinimizePlayerView), with: nil, afterDelay: 1)
 //         perform(#selector(handleMaximizePlayerView), with: nil, afterDelay: 1)
     }
     
     //MARK: -USER METHODS
     
+   
     func setupPlayerEpoisdeView()  {
        
         players.translatesAutoresizingMaskIntoConstraints = false
@@ -57,6 +58,7 @@ class MainTabBarVC: UITabBarController {
         tabBar.tintColor = .black
         
         viewControllers = [
+            
             favorite,
            search ,
             download
@@ -74,8 +76,8 @@ class MainTabBarVC: UITabBarController {
     fileprivate func templateNavControllerVC(title: String, selectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {
         let viewController = rootViewController
         let navController = UINavigationController(rootViewController: viewController)
-         navController.title = title
-        navController.tabBarItem.image = selectedImage
+        navController.title = title
+       navController.tabBarItem.image = selectedImage
         return navController
     }
     

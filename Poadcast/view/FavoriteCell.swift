@@ -10,6 +10,18 @@ import UIKit
 
 class FavoriteCell: UICollectionViewCell {
     
+    var podcasts:PodcastModel? {
+        didSet{
+            guard let pod = podcasts else { return  }
+            epoisdeName.text = pod.artistName
+            epoisdeauthor.text = pod.trackName
+            
+            guard  let url = URL(string: pod.artworkUrl600 ?? "") else {return}
+            
+            mainImage.sd_setImage(with: url)
+        }
+    }
+    
     let mainImage:UIImageView = {
        let im = UIImageView()
         im.image = #imageLiteral(resourceName: "music")
@@ -18,14 +30,12 @@ class FavoriteCell: UICollectionViewCell {
     }()
     let epoisdeName:UILabel = {
        let la = UILabel()
-        la.text = "hosam elmalt"
         la.font = UIFont.systemFont(ofSize: 15)
         la.numberOfLines = 0
         return la
     }()
     let epoisdeauthor:UILabel = {
         let la = UILabel()
-        la.text = "sdfdsafdsaa dffgds"
         la.font = UIFont.systemFont(ofSize: 13)
         la.textColor = .lightGray
         la.numberOfLines = 0
