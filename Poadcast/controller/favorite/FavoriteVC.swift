@@ -14,10 +14,9 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
     
     var podcasts = UserDefaults.standard.savePodcasts()
     
-    
-    override func viewDidLoad() {
+   override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Favorite"
+    
         setupCollectionView()
     }
     
@@ -29,6 +28,9 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
         
         UIApplication.getMainTabBarController()?.viewControllers?[0].tabBarItem.badgeValue = nil
     }
+    
+    //MARK: -UICollectionView
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return podcasts.count
     }
@@ -38,7 +40,6 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
         let pods = podcasts[indexPath.item]
         
         cell.podcasts = pods
-        cell.backgroundColor = .white
         return cell
     }
     
@@ -52,14 +53,7 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
     
-    //MARK:-USER METHODS
     
-    fileprivate func setupCollectionView() {
-        collectionView.backgroundColor = .white
-        collectionView.register(FavoriteCell.self, forCellWithReuseIdentifier: cellId)
-        
-        collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLonePressed)))
-    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = podcasts[indexPath.item]
@@ -69,27 +63,37 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
         
         navigationController?.pushViewController(epoisde, animated: true)
     }
-    func createAlert(title:String, message: String,index:IndexPath,pod:PodcastModel)  {
+    
+    //MARK:-USER METHODS
+    
+    fileprivate func setupCollectionView() {
+        collectionView.backgroundColor = .white
+        collectionView.register(FavoriteCell.self, forCellWithReuseIdentifier: cellId)
+        
+        collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(handleLonePressed)))
+    }
+    
+   func createAlert(title:String, message: String,index:IndexPath,pod:PodcastModel)  {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         let action = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         let acs  = UIAlertAction(title: "OK", style: .destructive) { (tx) in
             self.podcasts.remove(at: index.item)
              UserDefaults.standard.deletePodcast(pod: pod)
             self.collectionView.deleteItems(at: [index])
-//            self.collectionView.reloadData()
+
         }
         alert.addAction(acs)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        
     }
+    
+    //TODO: -handle methods
     
     @objc func handleLonePressed(gest: UILongPressGestureRecognizer){
         let p = gest.location(in: collectionView)
         guard  let indexPath = collectionView.indexPathForItem(at: p) else {return}
         let pods = podcasts[indexPath.item]
-//         let index = podcasts[indexPath.item]
-//         UserDefaults.standard.deletePodcast(pod: index )
+
         let location = gest.location(in: collectionView)
        
         guard  let index = collectionView.indexPathForItem(at: location) else {return }

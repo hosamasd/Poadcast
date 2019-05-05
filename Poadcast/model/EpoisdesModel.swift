@@ -21,9 +21,9 @@ struct EpoisdesModel: Codable {
     
     init(feed:RSSFeedItem) {
         self.streamUrl = feed.enclosure?.attributes?.url ?? ""
-        self.title = feed.title ?? "no title"
+        self.title = feed.title ?? ""
         self.pubDate = feed.pubDate ?? Date()
-        self.description = feed.iTunes?.iTunesSubtitle ?? feed.description ?? "no description"
+        self.description = feed.iTunes?.iTunesSubtitle ?? feed.description ?? ""
         self.imageUrl = feed.iTunes?.iTunesImage?.attributes?.href
         self.author = feed.author ?? ""
     }

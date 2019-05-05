@@ -12,20 +12,20 @@ import FeedKit
 
 extension Notification.Name {
     static let downloadProgress = Notification.Name("downloadProgress")
-     static let downloadComplete = Notification.Name("downloadComplete")
+    static let downloadComplete = Notification.Name("downloadComplete")
 }
 
 class APIServices {
     
     typealias EposdeDownloadCompleteTuple = (title:String,filUrl:String)
-     let baseUrlItunes = "https://itunes.apple.com/search"
+    let baseUrlItunes = "https://itunes.apple.com/search"
     static let shared = APIServices()
     
     func downloadEpoisde(epoisde: EpoisdesModel)  {
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
         
         Alamofire.download(epoisde.streamUrl, to: downloadRequest).downloadProgress { (progress) in
-          
+            
             //post notification here to called with downloadvc
             NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title":epoisde.title,"progress":progress.fractionCompleted])
             }.response { (res) in
@@ -37,7 +37,7 @@ class APIServices {
                 var downloadeEpoisde = UserDefaults.standard.downloadedEpoisde()
                 guard let index = downloadeEpoisde.index(where: {
                     $0.author == epoisde.author &&
-                    $0.title == epoisde.title
+                        $0.title == epoisde.title
                 }) else {return}
                 
                 downloadeEpoisde[index].fileUrl = fileUrl
@@ -53,9 +53,7 @@ class APIServices {
     
     func fetchEpoisdes(feedUrl:String,completion:  @escaping ([EpoisdesModel])->())  {
         
-        
-        
-        guard let feedUrl =  URL(string: feedUrl) else { return  }
+         guard let feedUrl =  URL(string: feedUrl) else { return  }
         //put it in background thread
         DispatchQueue.global(qos: .background).async {
             let parser = FeedParser(URL: feedUrl)
@@ -68,14 +66,12 @@ class APIServices {
                 guard let feed = result.rssFeed else {return}
                 let epoisdes = feed.toEpoisdes()
                 completion(epoisdes)
-                
             }
         }
-        
     }
     
     func getPodcast(text:String,completion: @escaping (PodcastModel)->())  {
-       
+        
         let params = ["term":text,"media":"podcast"]
         
         Alamofire.request(baseUrlItunes, method: .get, parameters: params, encoding: URLEncoding.default, headers: nil).responseData { (response) in

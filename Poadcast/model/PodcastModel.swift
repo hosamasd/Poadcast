@@ -8,7 +8,8 @@
 
 import UIKit
 
-class PodcastModel:NSObject, Codable ,NSCoding{
+class PodcastModel:NSObject, Codable , NSCoding{
+    
     func encode(with aCoder: NSCoder) {
         print("podcast to data")
         aCoder.encode(trackName ?? "",forKey: "trackName")

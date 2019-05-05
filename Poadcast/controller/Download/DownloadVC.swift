@@ -9,6 +9,7 @@
 import UIKit
 
 class DownloadVC: UITableViewController {
+    
     let cellID = "cellID"
     var epoisdes = UserDefaults.standard.downloadedEpoisde()
     
@@ -25,6 +26,9 @@ class DownloadVC: UITableViewController {
         tableView.reloadData()
          UIApplication.getMainTabBarController()?.viewControllers?[2].tabBarItem.badgeValue = nil
     }
+    
+    //MARK: -UITableView
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return epoisdes.count
     }
@@ -70,16 +74,21 @@ class DownloadVC: UITableViewController {
         
         return [downloadACT]
     }
-    func setupObservers()  {
+    
+     //MARK: -Uuser methods
+    
+   fileprivate func setupObservers()  {
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadProgress), name: .downloadProgress, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadComplete), name: .downloadComplete, object: nil)
     }
-    func setupTableView()  {
+   fileprivate func setupTableView()  {
         let nib = UINib(nibName: "EpoisdeCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: cellID)
         tableView.tableFooterView = UIView() // remove lines of cells
     }
+    
+    //TODO: -handle methods
     
     @objc func handleDownloadComplete(notify: Notification){
     guard let object = notify.object as? APIServices.EposdeDownloadCompleteTuple else { return  }
