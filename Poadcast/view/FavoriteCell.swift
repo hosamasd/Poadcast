@@ -13,8 +13,8 @@ class FavoriteCell: UICollectionViewCell {
     var podcasts:PodcastModel? {
         didSet{
             guard let pod = podcasts else { return  }
-            epoisdeName.text = pod.artistName
-            epoisdeauthor.text = pod.trackName
+            epoisdeName.text = pod.trackName
+            epoisdeauthor.text = pod.artistName
             
             guard  let url = URL(string: pod.artworkUrl600 ?? "") else {return}
             
@@ -53,12 +53,16 @@ class FavoriteCell: UICollectionViewCell {
     }
     
     func setupViews()  {
-        let stack = UIStackView(arrangedSubviews: [mainImage,epoisdeName,epoisdeauthor])
+        
+        
+        let stack = UIStackView(arrangedSubviews: [epoisdeName,epoisdeauthor])
         stack.axis = .vertical
         stack.spacing = 2
-        
+        stack.distribution = .fillEqually
+        addSubview(mainImage)
         addSubview(stack)
         
-        stack.fillSuperview()
+        mainImage.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: .init(width: 0, height: 120))
+        stack.anchor(top: mainImage.bottomAnchor, leading: leadingAnchor, bottom: bottomAnchor, trailing: trailingAnchor,padding: .init(top: 4, left: 0, bottom: 0, right: 0))
     }
 }

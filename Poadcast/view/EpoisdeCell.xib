@@ -49,6 +49,14 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YBT-oq-H7V">
+                        <rect key="frame" x="21.5" y="41" width="73.5" height="34.5"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="27"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                        <color key="shadowColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <size key="shadowOffset" width="0.0" height="2"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="6J8-ab-NAU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="58y-1A-AuS"/>
@@ -63,6 +71,8 @@
                     <constraint firstItem="Qqz-gL-t0C" firstAttribute="top" secondItem="rSh-jM-sfi" secondAttribute="bottom" constant="8" id="qt1-3v-LX9"/>
                     <constraint firstItem="TrO-e8-xhc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="sig-hx-msU"/>
                     <constraint firstAttribute="trailingMargin" secondItem="rSh-jM-sfi" secondAttribute="trailing" constant="8" id="tII-SQ-HLx"/>
+                    <constraint firstItem="YBT-oq-H7V" firstAttribute="centerY" secondItem="6J8-ab-NAU" secondAttribute="centerY" id="tc4-10-O2x"/>
+                    <constraint firstItem="YBT-oq-H7V" firstAttribute="centerX" secondItem="6J8-ab-NAU" secondAttribute="centerX" id="yrv-eg-iYX"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -71,6 +81,7 @@
                 <outlet property="epoisdeImage" destination="6J8-ab-NAU" id="F2j-To-2Di"/>
                 <outlet property="epoisdePubDate" destination="TrO-e8-xhc" id="gix-vH-L9w"/>
                 <outlet property="epoisdeTitle" destination="rSh-jM-sfi" id="hWm-aE-E4f"/>
+                <outlet property="progressLabel" destination="YBT-oq-H7V" id="Zqc-Qq-ufp"/>
             </connections>
             <point key="canvasLocation" x="7.2000000000000002" y="212.29385307346328"/>
         </tableViewCell>

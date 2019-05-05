@@ -9,8 +9,15 @@
 import UIKit
 import Alamofire
 import FeedKit
+
+extension Notification.Name {
+    static let downloadProgress = Notification.Name("downloadProgress")
+     static let downloadComplete = Notification.Name("downloadComplete")
+}
+
 class APIServices {
     
+    typealias EposdeDownloadCompleteTuple = (title:String,filUrl:String)
      let baseUrlItunes = "https://itunes.apple.com/search"
     static let shared = APIServices()
     
@@ -18,9 +25,14 @@ class APIServices {
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
         
         Alamofire.download(epoisde.streamUrl, to: downloadRequest).downloadProgress { (progress) in
-            print(progress.fractionCompleted)
+          
+            //post notification here to called with downloadvc
+            NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title":epoisde.title,"progress":progress.fractionCompleted])
             }.response { (res) in
                 guard let fileUrl =  res.destinationURL?.absoluteString else {return}
+                let epoisdeDownloadComplete = EposdeDownloadCompleteTuple(fileUrl,epoisde.title)
+                
+                NotificationCenter.default.post(name: .downloadComplete, object: epoisdeDownloadComplete, userInfo: nil)
                 
                 var downloadeEpoisde = UserDefaults.standard.downloadedEpoisde()
                 guard let index = downloadeEpoisde.index(where: {

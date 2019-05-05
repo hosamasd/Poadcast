@@ -96,6 +96,10 @@ extension SearchVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 
+        if searchText.count == 0 {
+            poadcastArray.removeAll()
+            self.tableView.reloadData()
+        }
         poadcastArray.removeAll()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (time) in
@@ -106,7 +110,5 @@ extension SearchVC: UISearchBarDelegate {
                 
             }
         })
-        
-       
-    }
+     }
 }

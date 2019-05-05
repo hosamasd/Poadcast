@@ -40,6 +40,7 @@ extension UserDefaults {
         }
         return []
     }
+    
     func deletePodcast(pod: PodcastModel)  {
         let podcasts = savePodcasts()
         let filterPod = podcasts.filter { (p) -> Bool in
@@ -48,6 +49,17 @@ extension UserDefaults {
         
         let data = NSKeyedArchiver.archivedData(withRootObject: filterPod)
         UserDefaults.standard.set(data, forKey: UserDefaults.ketTrack)
+        
+    }
+    
+    func deleteEpoisde(epoi: EpoisdesModel)  {
+        let epoisdes = downloadedEpoisde()
+        let filterEpoi = epoisdes.filter { (e) -> Bool in
+            return e.title != e.title && e.author != e.author
+        }
+        
+        let data = NSKeyedArchiver.archivedData(withRootObject: filterEpoi)
+        UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpoisdeKey)
         
     }
 }

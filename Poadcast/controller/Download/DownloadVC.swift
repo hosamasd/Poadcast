@@ -16,6 +16,7 @@ class DownloadVC: UITableViewController {
         super.viewDidLoad()
         
         setupTableView()
+        setupObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,13 +55,56 @@ class DownloadVC: UITableViewController {
             }
         
     }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let downloadACT = UITableViewRowAction(style: .destructive, title: "Delete") { (_, _) in
+            let epoisde = self.epoisdes[indexPath.row]
+            self.epoisdes.remove(at: indexPath.row)
+            UserDefaults.standard.deleteEpoisde(epoi: epoisde)
+            tableView.reloadData()
+        }
+        
+        return [downloadACT]
+    }
+    func setupObservers()  {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadProgress), name: .downloadProgress, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadComplete), name: .downloadComplete, object: nil)
+    }
     func setupTableView()  {
         let nib = UINib(nibName: "EpoisdeCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: cellID)
         tableView.tableFooterView = UIView() // remove lines of cells
+    }
+    
+    @objc func handleDownloadComplete(notify: Notification){
+    guard let object = notify.object as? APIServices.EposdeDownloadCompleteTuple else { return  }
+        
+        guard let index = self.epoisdes.index(where: {
+            $0.title == title
+        })else {return}
+        self.epoisdes[index].fileUrl = object.filUrl
+    }
+    
+    @objc func handleDownloadProgress(notify: Notification){
+        guard let userInfo = notify.userInfo as? [String:Any] else { return  }
+        guard let title = userInfo["title"] as? String else { return  }
+        guard let progress = userInfo["progress"] as? Double else { return  }
+        
+       guard let index = self.epoisdes.index(where: {
+            $0.title == title
+       })else {return}
+       guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? EpoisdeCell else { return  }
+        cell.progressLabel.text = "\(Int(progress * 100 ))%"
+        cell.progressLabel.isHidden = false
+        
+        if progress == 1 {
+            cell.progressLabel.isHidden = true
+        }
+       
     }
 }

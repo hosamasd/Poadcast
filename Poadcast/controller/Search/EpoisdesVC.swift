@@ -106,7 +106,7 @@ class EpoisdesVC: UITableViewController {
         let downloadACT = UITableViewRowAction(style: .normal, title: "Download") { (_, _) in
             let epoisde = self.eposdeArray[indexPath.row]
             UserDefaults.standard.downloadEpoisde(epoisde: epoisde)
-//            self.showHighlightTapped(index: 2)
+            self.showHighlightTapped(index: 2)
             
             APIServices.shared.downloadEpoisde(epoisde: epoisde)
         }
@@ -133,15 +133,6 @@ class EpoisdesVC: UITableViewController {
         
         let main = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarVC
         main?.handleMaximizePlayerView(epoisde: index,playlist: self.eposdeArray)
-        
-//        let playerEpoisdeView = PlayerEpoisdeView.initFromNib()
-//        playerEpoisdeView.epoisde = index
-//        playerEpoisdeView.frame = view.frame
-//
-//        let window = UIApplication.shared.keyWindow
-//        window?.addSubview(playerEpoisdeView)
-        
-        
     }
     
     func showHighlightTapped(index: Int)  {

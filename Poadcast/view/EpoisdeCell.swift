@@ -10,6 +10,7 @@ import UIKit
 
 class EpoisdeCell: UITableViewCell {
 
+    @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var epoisdeDescription: UILabel!
     @IBOutlet weak var epoisdeTitle: UILabel!{
         didSet{
@@ -24,7 +25,7 @@ class EpoisdeCell: UITableViewCell {
              epoisdeTitle.text = epoisde.title
             epoisdeDescription.text =  epoisde.description
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM dd, yyyy"
+            dateFormatter.dateFormat = "EEEE"
            let dateString = dateFormatter.string(from: epoisde.pubDate)
             
             epoisdePubDate.text = dateString
