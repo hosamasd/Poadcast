@@ -75,6 +75,18 @@ class DownloadVC: UITableViewController {
         return [downloadACT]
     }
     
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "No download list done before!"
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.textAlignment = .center
+        return label
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return self.epoisdes.count > 0 ? 0 : 250
+    }
+    
      //MARK: -Uuser methods
     
    fileprivate func setupObservers()  {

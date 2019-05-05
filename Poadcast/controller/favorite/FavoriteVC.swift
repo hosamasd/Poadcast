@@ -53,8 +53,7 @@ class FavoriteVC: UICollectionViewController, UICollectionViewDelegateFlowLayout
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
     
-    
-    
+   
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let index = podcasts[indexPath.item]
         
