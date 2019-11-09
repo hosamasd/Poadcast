@@ -3,8 +3,7 @@ Simple app for using podcast usinf=g itunes api to found podcast and then listen
 Enjoy.
 demo video 
 
-https://j.gifs.com/jZJJyR.gif
-
+<iframe src='//gifs.com/embed/podcast-jZJJyR' frameborder='0' scrolling='no' width='348px' height='576px' style='-webkit-backface-visibility: hidden;-webkit-transform: scale(1);' ></iframe>
 
 ![favoritepage](https://user-images.githubusercontent.com/34996617/57191224-632ddf80-6f23-11e9-8abf-1cb3507e2678.png)
 ![searchpage](https://user-images.githubusercontent.com/34996617/57191225-64f7a300-6f23-11e9-8d3a-0f2ff1d92f10.png)
