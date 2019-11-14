@@ -1,7 +1,8 @@
 # Poadcast
 Simple app for using podcast usinf=g itunes api to found podcast and then listen to it and can download it and also favorite the best podcast for any user
 Enjoy.
-demo video 
+
+# short demo video 
 
 ![Alt Text](https://j.gifs.com/jZJJyR.gif)
 
